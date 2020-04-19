@@ -39,12 +39,21 @@ functions:
           method: post
           cors: true
 
-  userTickers:
+  getUser:
     handler: functions/userTickers.getUser
     events:
       - http:
-          path: getUser
+          path: userTickers
           method: get
+          cors: true
+          authorizer: verify-token
+
+  updateUserTickers:
+    handler: functions/userTickers.updateUserTickers
+    events:
+      - http:
+          path: userTickers
+          method: put
           cors: true
           authorizer: verify-token
 
