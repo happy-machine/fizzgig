@@ -15,6 +15,7 @@ serverless/.DS_Store
 client/.DS_Store
 client/yarn-error.log
 serverless/.vscode
+serverless/.nyc_output
 client/.vscode
 
 /client
