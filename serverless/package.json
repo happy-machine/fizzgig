@@ -1,0 +1,26 @@
+{
+  "name": "a-crash-course-on-serverless-auth",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "scripts": {
+    "offline": "sls offline start --skipCacheInvalidation",
+    "test": "nyc mocha $(find ./ -name '*_spec.js') --timeout 6000 --exit && nyc report --reporter=html",
+    "test-one": "mocha $(find ./ -name '*_spec.js')"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bcryptjs-then": "^1.0.1",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.9.9"
+  },
+  "devDependencies": {
+    "serverless-offline": "^3.20.1",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.3.0"
+  }
+}

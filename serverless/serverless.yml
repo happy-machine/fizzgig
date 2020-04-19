@@ -1,0 +1,52 @@
+service: fizzgig
+org: thisisdjfresh
+app: fizzgig
+
+custom:
+  secrets: ${file(secrets.json)}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  environment:
+    JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
+    DB: ${self:custom.secrets.DB}
+
+package:
+  individually: false
+  exclude:
+    - "./test/**"
+
+functions:
+  verify-token:
+    handler: functions/auth.auth
+
+  login:
+    handler: functions/auth.login
+    events:
+      - http:
+          path: login
+          method: post
+          cors: true
+
+  register:
+    handler: functions/auth.register
+    events:
+      - http:
+          path: register
+          method: post
+          cors: true
+
+  userTickers:
+    handler: functions/userTickers.getUser
+    events:
+      - http:
+          path: getUser
+          method: get
+          cors: true
+          authorizer: verify-token
+
+plugins:
+  - serverless-offline

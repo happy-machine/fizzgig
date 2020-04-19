@@ -1,0 +1,20 @@
+# package directories
+serverless/node_modules
+client/node_modules
+
+# Serverless directories
+serverless/.serverless
+
+# Environment Variables
+serverless/secrets.json
+client/.env
+
+#misc
+.DS_Store
+serverless/.DS_Store
+client/.DS_Store
+client/yarn-error.log
+serverless/.vscode
+client/.vscode
+
+/client
