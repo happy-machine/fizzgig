@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   tickers: [
     {
       name: String,
-      ticker: String,
+      symbol: String,
       should_notify: { type: Boolean, default: false },
       last_notified: { type: Date, default: Date.now },
       notification_thresholds: {
