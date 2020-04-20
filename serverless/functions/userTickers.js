@@ -18,6 +18,7 @@ module.exports.getUser = (event, context) => {
 };
 
 module.exports.updateUserTickers = (event, context) => {
+  console.log("CALLED!!");
   context.callbackWaitsForEmptyEventLoop = false;
   return connectToDatabase()
     .then(() =>

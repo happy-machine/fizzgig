@@ -7,6 +7,12 @@ const UserSchema = new mongoose.Schema({
     {
       name: String,
       ticker: String,
+      should_notify: { type: Boolean, default: false },
+      last_notified: { type: Date, default: Date.now },
+      notification_thresholds: {
+        high: { type: Number, default: 0 },
+        low: { type: Number, default: 1000000 },
+      },
     },
   ],
 });
