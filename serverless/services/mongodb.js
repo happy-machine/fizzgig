@@ -9,7 +9,10 @@ module.exports = connectToDatabase = async () => {
 
   console.log("Using new database connection");
   try {
-    const db = await mongoose.connect(process.env.DB);
+    const db = await mongoose.connect(process.env.DB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     isConnected = db.connections[0].readyState;
     const connection = db.connections[0];
     return Promise.resolve();

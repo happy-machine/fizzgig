@@ -132,6 +132,39 @@ const mockUser3 = {
   ],
   __v: 1,
 };
+
+const mockUser4 = {
+  _id: "5e9d65c1c5760d0008de181b",
+  name: "test user 1",
+  email: "test@gmail.com",
+  password: "$2a$08$u52mRiJ10AX02v0kTAaDOO.ASMQQ2jxBo68AiVVfrVCu2d34hu.oi",
+  tickers: [
+    {
+      notification_thresholds: {
+        high: 120.11,
+        low: 0,
+      },
+      _id: "5e9d67f612137700086634a1",
+      name: "test stock 1",
+      symbol: "IBM",
+      should_notify: true,
+      last_notified: "2020-02-20T09:14:30.858Z",
+    },
+    {
+      notification_thresholds: {
+        high: 0,
+        low: 1000000,
+      },
+      _id: "5e9d67f612137700086634a2",
+      name: "test stock 2",
+      symbol: "TES2",
+      should_notify: false,
+      last_notified: "2020-04-20T09:14:30.858Z",
+    },
+  ],
+  __v: 1,
+};
+
 const mockTicker1 = {
   "Global Quote": {
     "01. symbol": "IBM",
@@ -202,6 +235,7 @@ module.exports = {
   mockUser1,
   mockUser2,
   mockUser3,
+  mockUser4,
   mockTicker1,
   mockTicker2,
 };

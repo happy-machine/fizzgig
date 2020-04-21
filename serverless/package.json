@@ -1,5 +1,5 @@
 {
-  "name": "a-crash-course-on-serverless-auth",
+  "name": "fizzgig",
   "version": "1.0.0",
   "main": "handler.js",
   "scripts": {
@@ -12,11 +12,16 @@
   "keywords": [],
   "description": "",
   "dependencies": {
+    "aws-sdk": "^2.659.0",
+    "axios": "^0.19.2",
+    "axios-rate-limit": "^1.2.1",
     "bcryptjs": "^2.4.3",
     "bcryptjs-then": "^1.0.1",
     "jsonwebtoken": "^8.2.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.9.9"
+    "mongoose": "^5.9.9",
+    "promisify": "0.0.3",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "serverless-offline": "^3.20.1",

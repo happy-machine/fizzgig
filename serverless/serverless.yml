@@ -13,6 +13,10 @@ provider:
   environment:
     JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
     DB: ${self:custom.secrets.DB}
+    ALERT_DELAY_HOURS: ${self:custom.secrets.ALERT_DELAY_HOURS}
+    ELASTICACHE_URL: ${self:custom.secrets.ELASTICACHE_URL}
+    ALPHA_VANTAGE_API_KEY: ${self:custom.secrets.ALPHA_VANTAGE_API_KEY}
+    EMAIL_ADDRESS: ${self:custom.secrets.EMAIL_ADDRESS}
 
 package:
   individually: false
@@ -39,11 +43,37 @@ functions:
           method: post
           cors: true
 
+  scheduler:
+    handler: functions/scheduler.runScheduler
+    events:
+      - http:
+          path: scheduler
+          method: get
+          cors: true
+
   getUser:
     handler: functions/userTickers.getUser
     events:
       - http:
           path: userTickers
+          method: get
+          cors: true
+          authorizer: verify-token
+
+  getTicker:
+    handler: functions/ticker.fetchTicker
+    events:
+      - http:
+          path: ticker
+          method: get
+          cors: true
+          authorizer: verify-token
+
+  getTickers:
+    handler: functions/tickers.fetchTickers
+    events:
+      - http:
+          path: tickers
           method: get
           cors: true
           authorizer: verify-token
@@ -56,6 +86,31 @@ functions:
           method: put
           cors: true
           authorizer: verify-token
+
+  search:
+    handler: functions/search.search
+    events:
+      - http:
+          path: search
+          method: get
+          cors: true
+          authorizer: verify-token
+
+iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+      - "logs:CreateLogGroup"
+      - "logs:CreateLogStream"
+      - "logs:PutLogEvents"
+      - "ec2:CreateNetworkInterface"
+      - "ec2:DeleteNetworkInterface"
+      - "ec2:DescribeNetworkInterfaces"
+    Resource: "*"
+vpc:
+  securityGroupIds:
+    - sg-1a354858
+  subnetIds:
+    - subnet-0fa20a31
 
 plugins:
   - serverless-offline
