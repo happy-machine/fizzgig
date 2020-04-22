@@ -12,19 +12,23 @@ module.exports.getUser = (event, context) => {
     }))
     .catch((err) => ({
       statusCode: err.statusCode || 500,
-      headers: { "Content-Type": "text/plain" },
+      headers: {
+        "Content-Type": "text/plain",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       body: JSON.stringify({ message: err.message }),
     }));
 };
 
 module.exports.updateUserTickers = (event, context) => {
-  console.log("CALLED!!");
+  console.log("CALLED!!", event.requestContext.authorizer.principalId);
   context.callbackWaitsForEmptyEventLoop = false;
   return connectToDatabase()
     .then(() =>
       updateUserTickers(
         event.requestContext.authorizer.principalId,
-        event.queryStringParameters.tickers
+        JSON.parse(event.queryStringParameters.tickers)
       )
     )
     .then((user) => ({
@@ -33,7 +37,11 @@ module.exports.updateUserTickers = (event, context) => {
     }))
     .catch((err) => ({
       statusCode: err.statusCode || 500,
-      headers: { "Content-Type": "text/plain" },
+      headers: {
+        "Content-Type": "text/plain",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       body: JSON.stringify({ message: err.message }),
     }));
 };

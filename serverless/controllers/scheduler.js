@@ -1,6 +1,7 @@
 const moment = require("moment");
 const User = require("../models/User");
 const { fetchTicker, format } = require("../controllers/lib");
+const { updateUserTickers } = require("../controllers/userTickers");
 const { setAsync } = require("../services/elasticache");
 const { sendEmail } = require("../services/ses");
 
@@ -15,8 +16,9 @@ async function run() {
       makeListOfNotifiiesForSymbol(transformed)
     );
     const data = await Promise.all(notifyNotifiies(symbolnNotifiieBlob));
+    console.log({ data });
     // filter the users according to shouldNotify ruleset, and notify via email
-    return data.flat();
+    return data;
   } catch (e) {
     return Promise.reject(new Error(e));
   }
@@ -43,9 +45,12 @@ const aggregateSymbols = () => User.distinct("tickers.symbol");
 const fetchTickers = (symbols) => symbols.map((symbol) => fetchTicker(symbol));
 
 const cacheSymbolsToRedis = (transformed) =>
-  transformed.map(
-    async (item) =>
-      await setAsync(
+  transformed.filter(async (item) => {
+    if (
+      item.ticker["Global Quote"] &&
+      item.ticker["Global Quote"]["05. price"]
+    ) {
+      return await setAsync(
         item.symbol,
         item.ticker["Global Quote"]["05. price"],
         "EX",
@@ -54,8 +59,11 @@ const cacheSymbolsToRedis = (transformed) =>
          * cache for 24 hours so that if symbols are
          * deleted they do not persist in redis
          **/
-      )
-  );
+      );
+    } else {
+      return null;
+    }
+  });
 
 const transform = (symbols, tickers) =>
   symbols.map((symbol, i) => ({
@@ -67,40 +75,73 @@ const fetchUsersForSymbol = (symbol) => User.find({ "tickers.symbol": symbol });
 
 const makeListOfNotifiiesForSymbol = (transformed) =>
   transformed.map(async ({ symbol, ticker }) => {
+    console.log("in make list with : ", ticker);
     const usersWithSymbol = await fetchUsersForSymbol(symbol);
     return {
       ticker,
       users: usersWithSymbol.filter((user) => {
-        const userTickerForSymbol = user.tickers.find(
+        const userForSymbol = user.tickers.find(
           (userTicker) =>
+            ticker["Global Quote"] &&
+            ticker["Global Quote"]["01. symbol"] &&
             userTicker.symbol === ticker["Global Quote"]["01. symbol"]
         );
-        return shouldNotify(userTickerForSymbol, ticker);
+        /**
+         * find users with the current symbol and filter them according
+         * to the shouldNotify conditions
+         * */
+        console.log({ usersWithSymbol });
+        return shouldNotify(userForSymbol, ticker);
       }),
     };
   });
-// If i had more time i would definetely write some tests for the above
 
 const notifyNotifiies = (symbolnNotifiieBlob) =>
-  symbolnNotifiieBlob.map(
-    async ({ ticker, users }) =>
-      await Promise.all(
-        users.map(async (user) => {
-          const userTicker = user.tickers.find(
-            (userTicker) =>
-              userTicker.symbol === ticker["Global Quote"]["01. symbol"]
+  symbolnNotifiieBlob
+    .map(({ ticker, users }) => {
+      const promises = [];
+      console.log("in notifier with : ", ticker);
+      users.forEach((user) => {
+        const userTicker = user.tickers.find(
+          /**
+           * there a lot of room for optimisation here, maybe use a Map to cache partial
+           * partial user operations to. Beyond the time scope.
+           **/
+          (userTicker) =>
+            ticker["Global Quote"] &&
+            ticker["Global Quote"]["01. symbol"] &&
+            userTicker.symbol === ticker["Global Quote"]["01. symbol"]
+        );
+        if (userTicker) {
+          const formatted = format(user, userTicker, ticker);
+          console.log(" and userTicker: ", userTicker);
+          const updatedUserTicker = {
+            ...userTicker._doc,
+            last_notified: moment.utc()._d,
+          };
+          console.log({ updatedUserTicker });
+          const otherTickers = user.tickers.filter(
+            (ticker) => ticker !== userTicker
           );
-          if (userTicker) {
-            const formatted = format(user, userTicker, ticker);
-            try {
-              return sendEmail(formatted);
-            } catch (e) {
-              throw new Error(e);
-            }
-          }
-        })
-      )
-  );
+          console.log("before error", user._id, user, user.email, [
+            ...otherTickers,
+            updatedUserTicker,
+          ]);
+          promises.push(
+            updateUserTickers(user._id, [...otherTickers, updatedUserTicker])
+            // update the last_notified field of the notified ticker
+          );
+          promises.push(sendEmail(formatted));
+        }
+      });
+      console.log({ users });
+      console.log({ promises });
+      //const results = await Promise.all(promises);
+      //console.log({ results });
+      //return results;
+      return promises;
+    })
+    .flat();
 
 module.exports = {
   shouldNotify,

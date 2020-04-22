@@ -10,7 +10,11 @@ module.exports.fetchTicker = (event, context) => {
     }))
     .catch((err) => ({
       statusCode: err.statusCode || 500,
-      headers: { "Content-Type": "text/plain" },
+      headers: {
+        "Content-Type": "text/plain",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       body: JSON.stringify({ message: err.message }),
     }));
 };
