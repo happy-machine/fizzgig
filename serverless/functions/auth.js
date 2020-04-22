@@ -1,6 +1,7 @@
 const connectToDatabase = require("../services/mongodb");
 const jwt = require("jsonwebtoken");
 const { register, login, generatePolicy } = require("../controllers/auth");
+const { headers } = require("../etc/lib");
 
 module.exports.login = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -9,15 +10,12 @@ module.exports.login = (event, context) => {
     .then((session) => ({
       statusCode: 200,
       body: JSON.stringify(session),
+      headers,
     }))
     .catch((err) => ({
       statusCode: err.statusCode || 500,
-      headers: {
-        "Content-Type": "text/plain",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
       body: { stack: err.stack, message: err.message },
+      headers,
     }));
 };
 
@@ -31,14 +29,11 @@ module.exports.register = (event, context) => {
     .then((session) => ({
       statusCode: 200,
       body: JSON.stringify(session),
+      headers,
     }))
     .catch((err) => ({
       statusCode: err.statusCode || 500,
-      headers: {
-        "Content-Type": "text/plain",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
+      headers,
       body: err.message,
     }));
 };

@@ -1,5 +1,6 @@
 const connectToDatabase = require("../services/mongodb");
 const { fetchTickers } = require("../controllers/tickers");
+const { headers } = require("../etc/lib");
 
 module.exports.fetchTickers = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -7,15 +8,12 @@ module.exports.fetchTickers = (event, context) => {
     .then(() => fetchTickers(event.requestContext.authorizer.principalId))
     .then((user) => ({
       statusCode: 200,
+      headers,
       body: JSON.stringify(user),
     }))
     .catch((err) => ({
       statusCode: err.statusCode || 500,
-      headers: {
-        "Content-Type": "text/plain",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
       body: JSON.stringify({ message: err.message }),
+      headers,
     }));
 };
