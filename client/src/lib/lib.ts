@@ -4,7 +4,6 @@ export const mapUserToSymbols = (user: IUser) =>
   user?.tickers?.map((ticker: IUserTicker) => ticker.symbol);
 
 export const mapTickersToMap = (tickers: ITicker[]) => {
-  console.log({ tickers });
   const newMap = new Map();
   tickers?.map((ticker) => newMap.set(ticker.symbol, ticker.stockValue));
   return newMap;
