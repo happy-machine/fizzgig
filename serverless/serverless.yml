@@ -44,6 +44,11 @@ functions:
 
   scheduler:
     handler: functions/scheduler.runScheduler
+    events:
+      - http:
+          path: scheduler
+          method: get
+          cors: true
 
   getUser:
     handler: functions/userTickers.getUser
@@ -70,7 +75,6 @@ functions:
           path: tickers
           method: post
           cors: true
-          authorizer: verify-token
 
   updateUserTickers:
     handler: functions/userTickers.updateUserTickers
@@ -88,7 +92,6 @@ functions:
           path: search
           method: get
           cors: true
-          authorizer: verify-token
 
 iamRoleStatements:
   - Effect: "Allow"

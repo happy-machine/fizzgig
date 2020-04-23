@@ -9,7 +9,10 @@ const UserSchema = new mongoose.Schema({
       name: String,
       symbol: String,
       should_notify: { type: Boolean, default: false },
-      last_notified: { type: Date, default: moment().subtract(1, "days") },
+      last_notified: {
+        type: Date,
+        default: moment().subtract(process.env.ALERT_DELAY_HOURS, "hours"),
+      },
       notification_thresholds: {
         high: { type: Number, default: 1000000 },
         low: { type: Number, default: 0 },

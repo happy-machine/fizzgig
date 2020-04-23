@@ -316,13 +316,6 @@ $brandOrange: #ff7800;
       margin-right: 5px;
     }
   }
-  .search-result-clock {
-    background-color: $listWhite;
-    border-radius: 50%;
-  }
-  .clock-container {
-    align-self: center;
-  }
 }
 
 .widget {
@@ -391,7 +384,7 @@ $brandOrange: #ff7800;
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 420px) {
   #container {
     #search-container {
       width: 90%;
