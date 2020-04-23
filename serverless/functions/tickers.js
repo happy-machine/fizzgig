@@ -1,15 +1,13 @@
-const connectToDatabase = require("../services/mongodb");
-const { fetchTickers } = require("../controllers/tickers");
+const { run } = require("../controllers/tickers");
 const { headers } = require("../etc/lib");
 
 module.exports.fetchTickers = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  return connectToDatabase()
-    .then(() => fetchTickers(event.requestContext.authorizer.principalId))
-    .then((user) => ({
+  return run(event.body)
+    .then((response) => ({
       statusCode: 200,
       headers,
-      body: JSON.stringify(user),
+      body: JSON.stringify(response),
     }))
     .catch((err) => ({
       statusCode: err.statusCode || 500,

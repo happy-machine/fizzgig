@@ -9,16 +9,14 @@ async function getUser(userId) {
   }
 }
 
-async function updateUserTickers(userId, tickers) {
+async function updateUserTickers(userId, body) {
+  const { tickers } = JSON.parse(body);
   try {
-    console.log("In error userId ", userId, " tickers: ", tickers);
     const user = await User.findById(userId);
-    console.log("GOT USER BY ID: ", user);
     user["tickers"] = tickers;
     const result = await user.save();
     return result;
   } catch (e) {
-    console.log("in ERROR!!");
     return Promise.reject(new Error(e));
   }
 }

@@ -1,6 +1,5 @@
 service: fizzgig
 org: thisisdjfresh
-app: fizzgig
 
 custom:
   secrets: ${file(secrets.json)}
@@ -74,9 +73,8 @@ functions:
     events:
       - http:
           path: tickers
-          method: get
+          method: post
           cors: true
-          authorizer: verify-token
 
   updateUserTickers:
     handler: functions/userTickers.updateUserTickers
@@ -94,7 +92,6 @@ functions:
           path: search
           method: get
           cors: true
-          authorizer: verify-token
 
 iamRoleStatements:
   - Effect: "Allow"

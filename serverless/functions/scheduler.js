@@ -1,5 +1,5 @@
 const connectToDatabase = require("../services/mongodb");
-const { shouldNotify, run } = require("../controllers/scheduler");
+const { run } = require("../controllers/scheduler");
 
 module.exports.runScheduler = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

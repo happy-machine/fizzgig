@@ -1,6 +1,7 @@
 const moment = require("moment");
 const User = require("../models/User");
-const { fetchTicker, format } = require("../controllers/lib");
+const { format } = require("../controllers/lib");
+const { fetchTicker } = require("../controllers/ticker");
 const { updateUserTickers } = require("../controllers/userTickers");
 const { setAsync } = require("../services/elasticache");
 const { sendEmail } = require("../services/ses");
@@ -28,7 +29,8 @@ function shouldNotify(userTicker, ticker) {
   const price = parseFloat(ticker["Global Quote"]["05. price"]);
   const high = parseFloat(userTicker.notification_thresholds.high);
   const low = parseFloat(userTicker.notification_thresholds.low);
-  if (low > price || high < price) {
+  if ((low && low > price) || (high && high < price)) {
+    // we use zero as 'off' as stocks will never hit zero (well.. maybe dont quote me on that : P
     if (!userTicker.should_notify) return false;
     const lastNotified = moment(userTicker.last_notified);
     if (moment().diff(lastNotified, "hours") > process.env.ALERT_DELAY_HOURS) {
@@ -75,7 +77,6 @@ const fetchUsersForSymbol = (symbol) => User.find({ "tickers.symbol": symbol });
 
 const makeListOfNotifiiesForSymbol = (transformed) =>
   transformed.map(async ({ symbol, ticker }) => {
-    console.log("in make list with : ", ticker);
     const usersWithSymbol = await fetchUsersForSymbol(symbol);
     return {
       ticker,
@@ -90,7 +91,6 @@ const makeListOfNotifiiesForSymbol = (transformed) =>
          * find users with the current symbol and filter them according
          * to the shouldNotify conditions
          * */
-        console.log({ usersWithSymbol });
         return shouldNotify(userForSymbol, ticker);
       }),
     };
@@ -100,7 +100,6 @@ const notifyNotifiies = (symbolnNotifiieBlob) =>
   symbolnNotifiieBlob
     .map(({ ticker, users }) => {
       const promises = [];
-      console.log("in notifier with : ", ticker);
       users.forEach((user) => {
         const userTicker = user.tickers.find(
           /**
@@ -114,19 +113,13 @@ const notifyNotifiies = (symbolnNotifiieBlob) =>
         );
         if (userTicker) {
           const formatted = format(user, userTicker, ticker);
-          console.log(" and userTicker: ", userTicker);
           const updatedUserTicker = {
             ...userTicker._doc,
             last_notified: moment.utc()._d,
           };
-          console.log({ updatedUserTicker });
           const otherTickers = user.tickers.filter(
             (ticker) => ticker !== userTicker
           );
-          console.log("before error", user._id, user, user.email, [
-            ...otherTickers,
-            updatedUserTicker,
-          ]);
           promises.push(
             updateUserTickers(user._id, [...otherTickers, updatedUserTicker])
             // update the last_notified field of the notified ticker
@@ -134,11 +127,6 @@ const notifyNotifiies = (symbolnNotifiieBlob) =>
           promises.push(sendEmail(formatted));
         }
       });
-      console.log({ users });
-      console.log({ promises });
-      //const results = await Promise.all(promises);
-      //console.log({ results });
-      //return results;
       return promises;
     })
     .flat();

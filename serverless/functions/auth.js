@@ -41,12 +41,16 @@ module.exports.register = (event, context) => {
 module.exports.auth = (event, context, callback) => {
   console.log({ event });
   // check header or url parameters or post parameters for token
-  const token = event.authorizationToken.split("Bearer ")[1];
-  if (!token) return callback(null, "Unauthorized");
+  console.log("log token: ", event.authorizationToken.split("Bearer ")[1]);
 
+  const token = event.authorizationToken.split("Bearer ")[1];
+  if (!token) return callback(null, "Unauthorized: No Token");
   return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return callback(null, "Unauthorized");
-
+    console.log(
+      "policy: ",
+      generatePolicy(decoded.id, "Allow", event.methodArn)
+    );
     // save to request for use in other routes
     return callback(null, generatePolicy(decoded.id, "Allow", event.methodArn));
   });

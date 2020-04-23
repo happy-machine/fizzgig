@@ -14,7 +14,6 @@ module.exports = connectToDatabase = async () => {
       useUnifiedTopology: true,
     });
     isConnected = db.connections[0].readyState;
-    const connection = db.connections[0];
     return Promise.resolve();
   } catch (e) {
     return Promise.reject(new Error(e));

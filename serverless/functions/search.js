@@ -1,13 +1,12 @@
-const connectToDatabase = require("../services/mongodb");
-const { search } = require("../controllers/lib");
+const { search } = require("../controllers/search");
 const { headers } = require("../etc/lib");
 
-module.exports.fetchTicker = (event, context) => {
+module.exports.search = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  search(event.queryStringParameters.keywords)
-    .then((user) => ({
+  return search(event.queryStringParameters.keywords)
+    .then((response) => ({
       statusCode: 200,
-      body: JSON.stringify(user),
+      body: JSON.stringify(response),
       headers,
     }))
     .catch((err) => ({

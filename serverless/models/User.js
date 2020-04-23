@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
       last_notified: { type: Date, default: Date.now },
       notification_thresholds: {
         high: { type: Number, default: 0 },
-        low: { type: Number, default: 1000000 },
+        low: { type: Number, default: 0 },
       },
     },
   ],

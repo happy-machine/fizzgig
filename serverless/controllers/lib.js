@@ -1,32 +1,4 @@
-const axios = require("axios");
 const moment = require("moment");
-const rateLimit = require("axios-rate-limit");
-
-const http = rateLimit(axios.create(), { perMilliseconds: 1000, maxRPS: 5 });
-http.getMaxRPS();
-// limit requests to be within freemium tier rate limit
-
-async function fetchTicker(symbol) {
-  try {
-    const response = await http.get(
-      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`
-    );
-    return response.data;
-  } catch (e) {
-    throw new Error(e);
-  }
-}
-
-async function search(keywords) {
-  try {
-    const response = await http.get(
-      `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keywords}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`
-    );
-    return response.data;
-  } catch (e) {
-    throw new Error(e);
-  }
-}
 
 function format(user, userTicker, ticker) {
   const header = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -58,7 +30,5 @@ function format(user, userTicker, ticker) {
 }
 
 module.exports = {
-  fetchTicker,
-  search,
   format,
 };
