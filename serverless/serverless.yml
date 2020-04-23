@@ -83,7 +83,6 @@ functions:
           path: userTickers
           method: put
           cors: true
-          authorizer: verify-token
 
   search:
     handler: functions/search.search

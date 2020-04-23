@@ -51,9 +51,10 @@ const cacheSymbolsToRedis = (transformed) =>
       item.ticker["Global Quote"] &&
       item.ticker["Global Quote"]["05. price"]
     ) {
+      const price = item.ticker["Global Quote"]["05. price"];
       return await setAsync(
         item.symbol,
-        item.ticker["Global Quote"]["05. price"],
+        !price || price === "null" ? "N/A" : price,
         "EX",
         60 * 60 * 24
         /***
