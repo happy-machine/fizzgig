@@ -15,7 +15,7 @@ The scheduler will send the user an email if a user created price threshold is c
 Setting up in AWS is fairly involved and too complicated to explain in detail here. You will need to set up
 instances of MongoDb as well as the AWS services Elasticache Redis, Lambda and SES.  
 You will need to set up a CDN that is linked to a security group shared by these AWS services.  
-You will need to set up scheduling rules for cloud watch events for the scheduling function, I run it ever minute with **rate(1 minute)**  
+You will need to set up scheduling rules for cloud watch events for the scheduling function, I run it ever five minutes with **rate(5 minute)**  
 You will also need to make sure that lambda has the following execution roles:
 
     "logs:CreateLogGroup"
