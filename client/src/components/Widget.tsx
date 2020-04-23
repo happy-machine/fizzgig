@@ -47,6 +47,7 @@ function Widget({
     if (response.success) {
       setUser(response.data);
       setStatus("Settings updated successfully");
+      setShowSettings({ visible: false, symbol: "" });
     } else {
       setStatus("Problem updating settings");
     }
