@@ -29,8 +29,7 @@ function shouldNotify(userTicker, ticker) {
   const price = parseFloat(ticker["Global Quote"]["05. price"]);
   const high = parseFloat(userTicker.notification_thresholds.high);
   const low = parseFloat(userTicker.notification_thresholds.low);
-  if ((low && low > price) || (high && high < price)) {
-    // we use zero as 'off' as stocks will never hit zero (well.. maybe dont quote me on that : P
+  if (low > price || high < price) {
     if (!userTicker.should_notify) return false;
     const lastNotified = moment(userTicker.last_notified);
     if (moment().diff(lastNotified, "hours") > process.env.ALERT_DELAY_HOURS) {

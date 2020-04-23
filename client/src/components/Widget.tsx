@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { BRAND_ORANGE } from "../constants";
 import { Settings, Close } from "@material-ui/icons";
 import { updateUserTickers } from "../lib/requests";
@@ -35,10 +35,19 @@ function Widget({
   setUser,
   setStatus,
 }: IWidgetProps) {
-  const [alert, setAlert] = useState(
-    parseFloat(thresholds.high) < parseFloat(stockValue) ||
-      parseFloat(thresholds.low) > parseFloat(stockValue)
-  );
+  useEffect(() => {
+    handleAlert();
+  });
+  const handleAlert = useCallback(() => {
+    console.log("high", parseFloat(thresholds.high) < parseFloat(stockValue));
+    console.log("low", parseFloat(thresholds.low) > parseFloat(stockValue));
+    const shouldAlert =
+      parseFloat(thresholds.high) < parseFloat(stockValue) ||
+      parseFloat(thresholds.low) > parseFloat(stockValue);
+    setAlert(shouldAlert);
+  }, [thresholds.high, thresholds.low, stockValue]);
+  console.log(thresholds.low, stockValue, thresholds.high);
+  const [alert, setAlert] = useState(false);
 
   const handleDelete = useCallback(async () => {
     const response = await updateUserTickers(

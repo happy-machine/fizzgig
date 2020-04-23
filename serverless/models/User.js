@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
       should_notify: { type: Boolean, default: false },
       last_notified: { type: Date, default: Date.now },
       notification_thresholds: {
-        high: { type: Number, default: 0 },
+        high: { type: Number, default: 1000000 },
         low: { type: Number, default: 0 },
       },
     },
