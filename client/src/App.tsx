@@ -17,10 +17,12 @@ function App() {
   useEffect(() => {
     async function setUp() {
       const user = await getUser();
-      if (user != null) {
-        setUser(user as IUser | undefined);
+      if (user.success && user.data !== null) {
+        setUser(user.data as IUser | undefined);
+      } else {
+        setStatus("Error getting settings");
       }
-      const symbols = mapUserToSymbols(user);
+      const symbols = mapUserToSymbols(user.data);
       if (symbols) {
         const userTickers = await getTickers(symbols);
         const userTickersMap = mapTickersToMap(userTickers);

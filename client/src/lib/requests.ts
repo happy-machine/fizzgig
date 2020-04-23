@@ -46,9 +46,16 @@ export const getUser = async () => {
       addAuthHeaders(`${API_PATH}/userTickers?check=boom`, GET)
     );
     if (!res.data) throw new Error("Bad response.");
-    return res.data;
+    return {
+      success: true,
+      data: res.data,
+    };
   } catch (e) {
-    return e;
+    console.log(e);
+    return {
+      success: false,
+      data: null,
+    };
   }
 };
 
