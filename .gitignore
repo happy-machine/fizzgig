@@ -7,6 +7,7 @@ serverless/.serverless
 
 # Environment Variables
 serverless/secrets.json
+serverless/etc/.test-env
 client/.env
 
 #misc
@@ -16,6 +17,5 @@ client/.DS_Store
 client/yarn-error.log
 serverless/.vscode
 serverless/.nyc_output
+serverless/coverage
 client/.vscode
-
-/client

@@ -1,0 +1,93 @@
+$brandOrange: #ff7800;
+
+html {
+  height: 100%;
+}
+
+@font-face {
+  font-family: "Montserrat-semibold";
+  src: local("Montserrat-semibold"),
+    url(../fonts/montserrat-semibold-latin.woff2) format("woff2");
+  font-family: "Montserrat-regular";
+  src: local("Montserrat-regular"),
+    url(../fonts/montserrat-regular-latin.woff2) format("woff2");
+}
+
+body {
+  margin: 0;
+  font-family: "Montserrat-semibold", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(to bottom, #29384e, #344257, #1e57b6);
+}
+
+.App-header {
+  margin-top: 2%;
+  justify-content: space-between;
+  display: inline-flex;
+  width: 100%;
+  color: white;
+  .App-logo {
+    height: 1.9em;
+    pointer-events: none;
+    align-self: center;
+    padding-top: 5px;
+    margin-left: 20px;
+  }
+  #logout {
+    font-size: 16px;
+    font-family: "Montserrat-regular";
+    font-weight: bold;
+    color: white;
+    align-self: center;
+    margin-right: 3%;
+    &:hover {
+      color: #bbb;
+      cursor: grab;
+    }
+  }
+}
+
+#app-title {
+  margin-top: 10px;
+  font-size: 1.5em;
+  margin-right: 100px;
+  justify-self: center;
+  align-self: center;
+  font-style: "Montserrat-semibold";
+}
+
+#logged-out {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  opacity: 0.99;
+  background-color: rgba(0, 0, 0, 0.756);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#status {
+  height: 15px;
+  font-size: 1em;
+  color: $brandOrange;
+  text-align: center;
+}
+
+#container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 3%;
+  margin-top: 5%;
+}
+
+@media screen and (max-width: 600px) {
+  #app-title {
+    margin-left: 10%;
+    font-size: 0.9em;
+    margin-right: 0;
+  }
+}
