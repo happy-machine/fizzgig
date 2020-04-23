@@ -56,7 +56,7 @@ const useSettingsForm = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist();
-    setInputs((inputs) => ({
+    setInputs((inputs: any) => ({
       ...inputs,
       [event.target.name]: event.target.value,
     }));
