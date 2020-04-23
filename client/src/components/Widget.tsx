@@ -36,12 +36,23 @@ function Widget({
   setStatus,
 }: IWidgetProps) {
   const [alert, setAlert] = useState(
-    !(
-      parseFloat(thresholds.high) < parseFloat(stockValue) ||
+    parseFloat(thresholds.high) < parseFloat(stockValue) ||
       parseFloat(thresholds.low) > parseFloat(stockValue)
-    )
   );
-
+  //   console.log(
+  //     parseFloat(thresholds.low),
+  //     parseFloat(stockValue),
+  //     parseFloat(thresholds.high)
+  //   );
+  //   console.log(parseFloat(thresholds.low) > parseFloat(stockValue));
+  //   console.log(parseFloat(thresholds.high) < parseFloat(stockValue));
+  //   console.log(
+  //     !(
+  //       parseFloat(thresholds.high) < parseFloat(stockValue) ||
+  //       parseFloat(thresholds.low) > parseFloat(stockValue)
+  //     )
+  //   );
+  //   console.log("____________________________");
   const handleDelete = useCallback(async () => {
     const response = await updateUserTickers(
       user.tickers.filter((ticker: IUserTicker) => ticker.symbol !== symbol)

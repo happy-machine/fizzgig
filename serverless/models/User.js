@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 const UserSchema = new mongoose.Schema({
   name: String,
   email: String,
@@ -8,7 +9,7 @@ const UserSchema = new mongoose.Schema({
       name: String,
       symbol: String,
       should_notify: { type: Boolean, default: false },
-      last_notified: { type: Date, default: Date.now },
+      last_notified: { type: Date, default: moment().subtract(1, "days") },
       notification_thresholds: {
         high: { type: Number, default: 1000000 },
         low: { type: Number, default: 0 },
