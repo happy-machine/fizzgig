@@ -13,8 +13,6 @@ interface IUseSettingsForm {
   setUser: (user: IUser) => void;
   showSettings: ISettings;
   user: IUser;
-  oldLow: string | undefined;
-  oldHigh: string | undefined;
 }
 
 const useSettingsForm = ({
@@ -23,8 +21,6 @@ const useSettingsForm = ({
   setUser,
   showSettings,
   user,
-  oldLow,
-  oldHigh,
 }: IUseSettingsForm) => {
   const [inputs, setInputs] = useState({ high: "", low: "" });
 
@@ -38,16 +34,11 @@ const useSettingsForm = ({
     const updatedTicker = {
       ...selectedTicker,
       notification_thresholds: {
-        high: inputs.high || oldHigh,
-        low: inputs.low || oldLow,
-        should_notify: true,
+        high: inputs.high,
+        low: inputs.low,
       },
+      should_notify: true,
     };
-    /***
-     * I want the placeholder to show the old value as a reminder, but i don't want
-     * the old values to populate the input when the user starts typing, so here
-     * we default to the old values passed down from the settings form
-     ***/
     const newTickers = [
       ...user.tickers.filter(
         (ticker: IUserTicker) => ticker.symbol !== showSettings.symbol

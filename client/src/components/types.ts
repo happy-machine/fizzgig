@@ -4,12 +4,12 @@ export interface IUserTickerNotificationThresholds {
 }
 
 export interface IUserTicker {
-  _id: string;
+  _id?: string;
   name: string;
   symbol: string;
-  should_notify: boolean;
-  last_notified: Date;
-  notification_thresholds: IUserTickerNotificationThresholds;
+  should_notify?: boolean;
+  last_notified?: Date;
+  notification_thresholds?: IUserTickerNotificationThresholds;
 }
 
 export type IUser = {

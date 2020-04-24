@@ -1,6 +1,10 @@
 import { GET, POST, PUT, API_PATH, COOKIE_TOKEN } from "../constants";
 import { setCookie, getCookie } from "./cookie";
-import { IUserTickerNotificationThresholds, IUser } from "../components/types";
+import {
+  IUserTickerNotificationThresholds,
+  IUser,
+  IUserTicker,
+} from "../components/types";
 const axios = require("axios");
 
 export type ICallbackArgs = {
@@ -83,7 +87,7 @@ export const getTickers = async (symbols: string[]) => {
   }
 };
 
-export const updateUserTickers = async (tickers: any) => {
+export const updateUserTickers = async (tickers: IUserTicker[]) => {
   try {
     const res = await axios({
       method: PUT,

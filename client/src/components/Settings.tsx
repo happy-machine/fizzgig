@@ -27,25 +27,25 @@ function Settings({
   setShowSettings,
   showSettings,
 }: ISettingsProps) {
-  const getSetting = useCallback(
-    (setting: string) => {
-      const ticker = user.tickers.find(
-        (ticker: IUserTicker) => ticker.symbol === showSettings.symbol
-      );
-      return ticker?.notification_thresholds[setting];
-    },
-    [user, showSettings.symbol]
-  );
   const { inputs, handleInputChange, handleSubmit } = useSettingsForm({
     callback: updateUserTickers,
     setStatus,
     showSettings,
     setUser,
     user,
-    oldHigh: getSetting("high"),
-    oldLow: getSetting("low"),
   });
   const { low, high } = inputs;
+  const getSetting = useCallback(
+    (setting: string) => {
+      const ticker = user.tickers.find(
+        (ticker: IUserTicker) => ticker.symbol === showSettings.symbol
+      );
+      if (ticker?.notification_thresholds) {
+        return ticker?.notification_thresholds[setting];
+      }
+    },
+    [user, showSettings.symbol]
+  );
 
   return (
     <div id="settings-outer-container">
@@ -69,7 +69,7 @@ function Settings({
                 type="text"
                 className="form-input"
                 placeholder={getSetting("high")}
-                // required
+                required
                 value={high}
                 onChange={handleInputChange}
               />
@@ -83,7 +83,7 @@ function Settings({
                 name="low"
                 className="form-input"
                 placeholder={getSetting("low")}
-                // required
+                required
                 value={low}
                 onChange={handleInputChange}
               />
