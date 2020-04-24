@@ -129,7 +129,7 @@ function App() {
               user={user}
               setUser={setUser}
               setStatus={setStatus}
-              stockValue={String(tickers.get(symbol)) || "N/A"}
+              stockValue={String(tickers.get(symbol) || "N/A")}
               showSettings={showSettings}
               setShowSettings={setShowSettings}
               thresholds={{
