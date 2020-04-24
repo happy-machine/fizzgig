@@ -59,15 +59,6 @@ functions:
           cors: true
           authorizer: verify-token
 
-  getTicker:
-    handler: functions/ticker.fetchTicker
-    events:
-      - http:
-          path: ticker
-          method: get
-          cors: true
-          authorizer: verify-token
-
   getTickers:
     handler: functions/tickers.fetchTickers
     events:
