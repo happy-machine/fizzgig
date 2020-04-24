@@ -10,10 +10,13 @@ import Widget from "./components/Widget";
 import { mapUserToSymbols, mapTickersToMap } from "./lib/lib";
 import { IUser } from "./components/types";
 import { getUser, getTickers } from "./lib/requests";
+import Tooltip from "@material-ui/core/Tooltip";
+import { InfoOutlined } from "@material-ui/icons";
 import "./css/App.scss";
 import "./css/components.scss";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(cookieExists());
   useEffect(() => {
     async function setUp() {
       const user = await getUser();
@@ -24,29 +27,44 @@ function App() {
       }
       const symbols = mapUserToSymbols(user.data);
       if (symbols) {
-        const userTickers = await getTickers(symbols);
-        const userTickersMap = mapTickersToMap(userTickers);
-        setTickers(userTickersMap);
-      }
-    }
-    setUp();
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (user) {
-        const symbols = mapUserToSymbols(user);
-        if (symbols) {
-          const userTickers = await getTickers(symbols);
-          const userTickersMap = mapTickersToMap(userTickers);
+        const response = await getTickers(symbols);
+        if (response.success) {
+          const userTickersMap = mapTickersToMap(response.data);
           setTickers(userTickersMap);
-          setStatus("");
+        } else {
+          setStatus("Error getting tickers");
         }
       }
-    }, 1000);
+    }
+    if (loggedIn) {
+      setUp();
+    }
+  }, [loggedIn]);
 
-    return () => clearInterval(interval);
-    // Polling due to lack of time, this would be websocket
+  useEffect(() => {
+    if (loggedIn) {
+      const interval = setInterval(async () => {
+        if (user) {
+          const symbols = mapUserToSymbols(user);
+          if (symbols) {
+            const response = await getTickers(symbols);
+            if (response.success) {
+              const userTickersMap = mapTickersToMap(response.data);
+              setTickers(userTickersMap);
+              setStatus("");
+            } else {
+              setStatus("Error getting tickers");
+            }
+          }
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+    /***
+     *  Polling due to lack of time, this would be websocket
+     * I only want this useEffect to depend on the interval
+     * the 'componentWillMount' takes care of login
+     ***/
   });
 
   const handleLogout = useCallback(async () => {
@@ -54,7 +72,6 @@ function App() {
     setLoggedIn(false);
   }, []);
 
-  const [loggedIn, setLoggedIn] = useState(cookieExists());
   const [user, setUser] = useState({} as IUser | undefined);
   const [tickers, setTickers] = useState(
     new Map() as Map<string, string> | undefined
@@ -74,6 +91,14 @@ function App() {
       )}
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        <div id="info">
+          <Tooltip
+            title="Set a threshold to recieve an email when the stock reaches higher than your high threshold or lower than your low threshold"
+            placement="top"
+          >
+            <InfoOutlined className={"info"} />
+          </Tooltip>
+        </div>
         {loggedIn && (
           <>
             <div id="app-title">Stock Alert Manager</div>
@@ -114,7 +139,7 @@ function App() {
               user={user}
               setUser={setUser}
               setStatus={setStatus}
-              stockValue={String(tickers.get(symbol)) || "N/A"}
+              stockValue={String(tickers.get(symbol) || "N/A")}
               showSettings={showSettings}
               setShowSettings={setShowSettings}
               thresholds={{

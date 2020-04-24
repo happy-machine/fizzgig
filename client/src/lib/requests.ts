@@ -42,9 +42,7 @@ export const search = async (searchString: string) => {
 
 export const getUser = async () => {
   try {
-    const res = await axios(
-      addAuthHeaders(`${API_PATH}/userTickers?check=boom`, GET)
-    );
+    const res = await axios(addAuthHeaders(`${API_PATH}/userTickers`, GET));
     if (!res.data) throw new Error("Bad response.");
     return {
       success: true,
@@ -72,9 +70,16 @@ export const getTickers = async (symbols: string[]) => {
       },
     });
     if (!res.data) throw new Error("Bad response.");
-    return res.data;
+    return {
+      success: true,
+      data: res.data,
+    };
   } catch (e) {
-    return e;
+    console.log(e);
+    return {
+      success: false,
+      data: null,
+    };
   }
 };
 
