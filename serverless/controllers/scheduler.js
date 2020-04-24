@@ -130,7 +130,7 @@ const notifyNotifiies = (symbolnNotifiieBlob) =>
           const otherTickers = user.tickers.filter(
             (ticker) => ticker !== userTicker
           );
-          console.log("updating and sending to: ", formatted.addresses);
+          console.log("updating and sending to: ", formatted);
           promises.push(
             updateUserTickers(user._id, [...otherTickers, updatedUserTicker])
             // update the last_notified field of the notified ticker
