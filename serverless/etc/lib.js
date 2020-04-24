@@ -7,7 +7,7 @@ const headers = {
 };
 
 const selectAlphaVantageKey = () => {
-  const keyOrArray = process.env.ALPHA_VANTAGE_API_KEYS.split();
+  const keyOrArray = process.env.ALPHA_VANTAGE_API_KEYS.split(",");
   const randomIndex = Math.floor(Math.random(keyOrArray.length));
   return keyOrArray[randomIndex];
   /***
