@@ -57,6 +57,7 @@ function Widget({
   //   console.log("____________________________");
   const handleDelete = useCallback(async () => {
     const response = await updateUserTickers(
+      user._id,
       user.tickers.filter((ticker: IUserTicker) => ticker.symbol !== symbol)
     );
     if (response.success) {

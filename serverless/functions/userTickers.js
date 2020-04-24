@@ -1,6 +1,5 @@
 const connectToDatabase = require("../services/mongodb");
 const { getUser, updateUserTickers } = require("../controllers/userTickers");
-const { run } = require("../controllers/tickers");
 const { headers } = require("../etc/lib");
 
 module.exports.getUser = (event, context) => {
@@ -21,10 +20,9 @@ module.exports.getUser = (event, context) => {
 
 module.exports.updateUserTickers = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
+  const { tickers, id } = JSON.parse(body);
   return connectToDatabase()
-    .then(() =>
-      updateUserTickers(event.requestContext.authorizer.principalId, event.body)
-    )
+    .then(() => updateUserTickers(id, tickers))
     .then((user) => ({
       statusCode: 200,
       body: JSON.stringify(user),

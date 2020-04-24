@@ -8,7 +8,7 @@ export type ICallback = {
 };
 
 interface IUseSettingsForm {
-  callback: (args: any) => any;
+  callback: (id: string, tickers: any) => any;
   setStatus: (status: string) => void;
   setUser: (user: IUser) => void;
   showSettings: ISettings;
@@ -45,7 +45,7 @@ const useSettingsForm = ({
       ),
       updatedTicker,
     ];
-    const response = await callback(newTickers);
+    const response = await callback(user._id, newTickers);
     if (response.success) {
       setUser(response.data);
       setStatus("Settings updated successfully");

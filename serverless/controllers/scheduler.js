@@ -16,10 +16,14 @@ async function run() {
     const symbolnNotifiieBlob = await Promise.all(
       makeListOfNotifiiesForSymbol(transformed)
     );
-    const data = await Promise.all(notifyNotifiies(symbolnNotifiieBlob));
-    console.log({ data });
-    // filter the users according to shouldNotify ruleset, and notify via email
-    return data;
+    try {
+      const data = await Promise.all(notifyNotifiies(symbolnNotifiieBlob));
+      console.log({ data });
+      // filter the users according to shouldNotify ruleset, and notify via email
+      return data;
+    } catch (e) {
+      Promise.reject(new Error("Error in notifyNotifiies: ", e));
+    }
   } catch (e) {
     return Promise.reject(new Error("Error in scheduler: ", e));
   }
@@ -33,9 +37,9 @@ function shouldNotify(userTicker, ticker) {
     if (!userTicker.should_notify) return false;
     const lastNotified = moment(userTicker.last_notified);
     console.log(
-      `got stock: ${userTicker.name}, low > price ${
-        low > price
-      }, high < price ${high < price}, should notify? ${
+      `got stock: ${userTicker}, low > price ${low > price}, high < price ${
+        high < price
+      }, should notify? ${
         userTicker.should_notify
       }, last notified hours: ${moment().diff(
         lastNotified,
@@ -43,11 +47,14 @@ function shouldNotify(userTicker, ticker) {
       )},  ALERT_DELAY_HOURS: ${process.env.ALERT_DELAY_HOURS}`
     );
     if (moment().diff(lastNotified, "hours") > process.env.ALERT_DELAY_HOURS) {
+      console.log("returning true on notified time check");
       return true;
     } else {
+      console.log("returning false on notified time check");
       return false;
     }
   }
+  console.log("returning false on price check");
   return false;
 }
 
@@ -130,7 +137,7 @@ const notifyNotifiies = (symbolnNotifiieBlob) =>
           const otherTickers = user.tickers.filter(
             (ticker) => ticker !== userTicker
           );
-          console.log("updating and sending to: ", formatted);
+          console.log("updating and sending: ", formatted);
           promises.push(
             updateUserTickers(user._id, [...otherTickers, updatedUserTicker])
             // update the last_notified field of the notified ticker

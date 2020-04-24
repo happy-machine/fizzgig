@@ -48,7 +48,7 @@ function Search({
             symbol: result["1. symbol"],
           },
         ];
-        const response = await updateUserTickers(newTickers);
+        const response = await updateUserTickers(user._id, newTickers);
         if (response.success) {
           setUser(response.data);
           setStatus(

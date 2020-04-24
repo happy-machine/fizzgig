@@ -9,6 +9,7 @@ const http = rateLimit(axios.create(), {
 });
 
 async function fetchTicker(symbol) {
+  console.log(`fetching ticker with key ${selectAlphaVantageKey()}`);
   try {
     const response = await http.get(
       `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${selectAlphaVantageKey()}`

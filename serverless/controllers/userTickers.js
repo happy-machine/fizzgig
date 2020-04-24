@@ -9,8 +9,7 @@ async function getUser(userId) {
   }
 }
 
-async function updateUserTickers(userId, body) {
-  const { tickers } = JSON.parse(body);
+async function updateUserTickers(userId, tickers) {
   try {
     const user = await User.findById(userId);
     user["tickers"] = tickers;

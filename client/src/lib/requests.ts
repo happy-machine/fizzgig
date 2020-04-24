@@ -87,7 +87,7 @@ export const getTickers = async (symbols: string[]) => {
   }
 };
 
-export const updateUserTickers = async (tickers: IUserTicker[]) => {
+export const updateUserTickers = async (id: string, tickers: IUserTicker[]) => {
   try {
     const res = await axios({
       method: PUT,
@@ -97,6 +97,7 @@ export const updateUserTickers = async (tickers: IUserTicker[]) => {
       },
       data: {
         tickers,
+        id,
       },
     });
     return {
