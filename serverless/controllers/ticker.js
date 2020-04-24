@@ -2,8 +2,11 @@ const axios = require("axios");
 const rateLimit = require("axios-rate-limit");
 const { selectAlphaVantageKey } = require("../etc/lib");
 
-const http = rateLimit(axios.create(), { perMilliseconds: 1000, maxRPS: 3 });
-http.getMaxRPS();
+const http = rateLimit(axios.create(), {
+  maxRequests: 3,
+  perMilliseconds: 1000,
+  maxRPS: 3,
+});
 
 async function fetchTicker(symbol) {
   try {

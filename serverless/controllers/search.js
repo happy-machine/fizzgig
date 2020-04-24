@@ -3,11 +3,11 @@ const rateLimit = require("axios-rate-limit");
 const { selectAlphaVantageKey } = require("../etc/lib");
 
 const searchHttp = rateLimit(axios.create(), {
+  maxRequests: 1,
   perMilliseconds: 1000,
   maxRPS: 1,
 });
 // temporary debounce hack due to time restraints!
-searchHttp.getMaxRPS();
 
 async function search(keywords) {
   console.log("in request");
