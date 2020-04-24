@@ -36,6 +36,11 @@ body {
     margin-left: 20px;
   }
   #logout {
+    #info {
+      margin-right: 10%;
+      color: gray;
+    }
+    display: flex;
     font-size: 16px;
     font-family: "Montserrat-regular";
     font-weight: bold;

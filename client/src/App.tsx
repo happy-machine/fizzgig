@@ -91,18 +91,18 @@ function App() {
       )}
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <div id="info">
-          <Tooltip
-            title="Set a threshold to recieve an email when the stock reaches higher than your high threshold or lower than your low threshold"
-            placement="top"
-          >
-            <InfoOutlined className={"info"} />
-          </Tooltip>
-        </div>
         {loggedIn && (
           <>
             <div id="app-title">Stock Alert Manager</div>
             <div id="logout" onClick={handleLogout}>
+              <div id="info">
+                <Tooltip
+                  title="Fizzgig sends you email when an added stock goes out of the thresholds you set on it's widgets settings. To add a stock, use the search on the left and select any result to add to your dashboard"
+                  placement="top"
+                >
+                  <InfoOutlined className={"info"} fontSize="small" />
+                </Tooltip>
+              </div>
               Logout
             </div>
           </>
@@ -143,8 +143,8 @@ function App() {
               showSettings={showSettings}
               setShowSettings={setShowSettings}
               thresholds={{
-                high: notification_thresholds.high,
-                low: notification_thresholds.low,
+                high: notification_thresholds?.high,
+                low: notification_thresholds?.low,
               }}
             />
           ))}

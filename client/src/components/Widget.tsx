@@ -10,8 +10,8 @@ interface ISettings {
 }
 
 type IThresholds = {
-  high: string;
-  low: string;
+  high: string | undefined;
+  low: string | undefined;
 };
 
 type IWidgetProps = {
@@ -36,8 +36,10 @@ function Widget({
   setStatus,
 }: IWidgetProps) {
   const [alert, setAlert] = useState(
-    parseFloat(thresholds.high) < parseFloat(stockValue) ||
-      parseFloat(thresholds.low) > parseFloat(stockValue)
+    thresholds.high && thresholds.low
+      ? parseFloat(thresholds.high) < parseFloat(stockValue) ||
+          parseFloat(thresholds?.low) > parseFloat(stockValue)
+      : null
   );
   //   console.log(
   //     parseFloat(thresholds.low),
