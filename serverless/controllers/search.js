@@ -1,6 +1,6 @@
 const axios = require("axios");
 const rateLimit = require("axios-rate-limit");
-import { selectAlphaVantageKey } from "../controllers/lib";
+const { selectAlphaVantageKey } = require("../controllers/lib");
 
 const searchHttp = rateLimit(axios.create(), {
   perMilliseconds: 1000,
