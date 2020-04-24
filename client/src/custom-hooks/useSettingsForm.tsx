@@ -36,8 +36,8 @@ const useSettingsForm = ({
       notification_thresholds: {
         high: inputs.high,
         low: inputs.low,
-        should_notify: true,
       },
+      should_notify: true,
     };
     const newTickers = [
       ...user.tickers.filter(
