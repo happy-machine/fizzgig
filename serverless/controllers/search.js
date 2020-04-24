@@ -1,5 +1,6 @@
 const axios = require("axios");
 const rateLimit = require("axios-rate-limit");
+import { selectAlphaVantageKey } from "../controllers/lib";
 
 const searchHttp = rateLimit(axios.create(), {
   perMilliseconds: 1000,
@@ -12,7 +13,7 @@ async function search(keywords) {
   console.log("in request");
   try {
     const response = await searchHttp.get(
-      `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keywords}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`
+      `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keywords}&apikey=${selectAlphaVantageKey()}`
     );
     console.log("in response with: ", response.data);
     return response.data;

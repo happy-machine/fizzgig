@@ -21,7 +21,7 @@ async function run() {
     // filter the users according to shouldNotify ruleset, and notify via email
     return data;
   } catch (e) {
-    return Promise.reject(new Error(e));
+    return Promise.reject(new Error("Error in scheduler: ", e));
   }
 }
 
@@ -32,6 +32,16 @@ function shouldNotify(userTicker, ticker) {
   if (low > price || high < price) {
     if (!userTicker.should_notify) return false;
     const lastNotified = moment(userTicker.last_notified);
+    console.log(
+      `got stock: ${userTicker.name}, low > price ${
+        low > price
+      }, high < price ${high < price}, should notify? ${
+        userTicker.should_notify
+      }, last notified hours: ${moment().diff(
+        lastNotified,
+        "hours"
+      )},  ALERT_DELAY_HOURS: ${process.env.ALERT_DELAY_HOURS}`
+    );
     if (moment().diff(lastNotified, "hours") > process.env.ALERT_DELAY_HOURS) {
       return true;
     } else {
@@ -120,6 +130,7 @@ const notifyNotifiies = (symbolnNotifiieBlob) =>
           const otherTickers = user.tickers.filter(
             (ticker) => ticker !== userTicker
           );
+          console.log("updating and sending to: ", formatting.addresses);
           promises.push(
             updateUserTickers(user._id, [...otherTickers, updatedUserTicker])
             // update the last_notified field of the notified ticker
