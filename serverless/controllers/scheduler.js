@@ -1,10 +1,12 @@
 const moment = require("moment");
 const User = require("../models/User");
+const axios = require("axios");
+const rateLimit = require("axios-rate-limit");
 const { format } = require("../controllers/lib");
-const { fetchTicker } = require("../controllers/ticker");
 const { updateUserTickers } = require("../controllers/userTickers");
 const { setAsync } = require("../services/elasticache");
 const { sendEmail } = require("../services/ses");
+const { selectAlphaVantageKey } = require("../etc/lib");
 
 async function run() {
   try {
@@ -28,6 +30,12 @@ async function run() {
     return Promise.reject(new Error("Error in scheduler: ", e));
   }
 }
+
+const http = rateLimit(axios.create(), {
+  maxRequests: 3,
+  perMilliseconds: 1000,
+  maxRPS: 3,
+});
 
 function shouldNotify(userTicker, ticker) {
   const price = parseFloat(ticker["Global Quote"]["05. price"]);
@@ -148,6 +156,19 @@ const notifyNotifiies = (symbolnNotifiieBlob) =>
       return promises;
     })
     .flat();
+
+async function fetchTicker(symbol) {
+  console.log(`fetching ticker with key ${selectAlphaVantageKey()}`);
+  try {
+    const response = await http.get(
+      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${selectAlphaVantageKey()}`
+    );
+    console.log("response to ticker: ", response.data);
+    return response.data;
+  } catch (e) {
+    throw new Error("Error in controller/ticker", e);
+  }
+}
 
 module.exports = {
   shouldNotify,
