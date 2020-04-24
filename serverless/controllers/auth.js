@@ -58,7 +58,7 @@ function login(eventBody) {
   return User.findOne({ email: eventBody.email })
     .then((user) =>
       !user
-        ? Promise.reject(new Error("User with that email does not exits."))
+        ? Promise.reject(new Error("User with that email does not exist."))
         : comparePassword(eventBody.password, user.password, user._id)
     )
     .then((token) => ({ auth: true, token: token }));
