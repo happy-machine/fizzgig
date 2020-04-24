@@ -20,7 +20,7 @@ module.exports.getUser = (event, context) => {
 
 module.exports.updateUserTickers = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const { tickers, id } = JSON.parse(body);
+  const { tickers, id } = JSON.parse(event.body);
   return connectToDatabase()
     .then(() => updateUserTickers(id, tickers))
     .then((user) => ({
