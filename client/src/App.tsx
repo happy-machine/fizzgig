@@ -14,6 +14,7 @@ import "./css/App.scss";
 import "./css/components.scss";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(cookieExists());
   useEffect(() => {
     async function setUp() {
       const user = await getUser();
@@ -24,29 +25,44 @@ function App() {
       }
       const symbols = mapUserToSymbols(user.data);
       if (symbols) {
-        const userTickers = await getTickers(symbols);
-        const userTickersMap = mapTickersToMap(userTickers);
-        setTickers(userTickersMap);
-      }
-    }
-    setUp();
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (user) {
-        const symbols = mapUserToSymbols(user);
-        if (symbols) {
-          const userTickers = await getTickers(symbols);
-          const userTickersMap = mapTickersToMap(userTickers);
+        const response = await getTickers(symbols);
+        if (response.success) {
+          const userTickersMap = mapTickersToMap(response.data);
           setTickers(userTickersMap);
-          setStatus("");
+        } else {
+          setStatus("Error getting tickers");
         }
       }
-    }, 1000);
+    }
+    if (loggedIn) {
+      setUp();
+    }
+  }, [loggedIn]);
 
-    return () => clearInterval(interval);
-    // Polling due to lack of time, this would be websocket
+  useEffect(() => {
+    if (loggedIn) {
+      const interval = setInterval(async () => {
+        if (user) {
+          const symbols = mapUserToSymbols(user);
+          if (symbols) {
+            const response = await getTickers(symbols);
+            if (response.success) {
+              const userTickersMap = mapTickersToMap(response.data);
+              setTickers(userTickersMap);
+              setStatus("");
+            } else {
+              setStatus("Error getting tickers");
+            }
+          }
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+    /***
+     *  Polling due to lack of time, this would be websocket
+     * I only want this useEffect to depend on the interval
+     * the 'componentWillMount' takes care of login
+     ***/
   });
 
   const handleLogout = useCallback(async () => {
@@ -54,7 +70,6 @@ function App() {
     setLoggedIn(false);
   }, []);
 
-  const [loggedIn, setLoggedIn] = useState(cookieExists());
   const [user, setUser] = useState({} as IUser | undefined);
   const [tickers, setTickers] = useState(
     new Map() as Map<string, string> | undefined
