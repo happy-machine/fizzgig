@@ -14,7 +14,7 @@ provider:
     DB: ${self:custom.secrets.DB}
     ALERT_DELAY_HOURS: ${self:custom.secrets.ALERT_DELAY_HOURS}
     ELASTICACHE_URL: ${self:custom.secrets.ELASTICACHE_URL}
-    ALPHA_VANTAGE_API_KEY: ${self:custom.secrets.ALPHA_VANTAGE_API_KEY}
+    ALPHA_VANTAGE_API_KEYS: ${self:custom.secrets.ALPHA_VANTAGE_API_KEYS}
     EMAIL_ADDRESS: ${self:custom.secrets.EMAIL_ADDRESS}
 
 package:
