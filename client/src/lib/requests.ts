@@ -43,7 +43,7 @@ export const search = async (searchString: string) => {
 export const getUser = async () => {
   try {
     const res = await axios(
-      addAuthHeaders(`${API_PATH}/userTickers?check=boom`, GET)
+      addAuthHeaders(`${API_PATH}/userTickers`, GET)
     );
     if (!res.data) throw new Error("Bad response.");
     return {
