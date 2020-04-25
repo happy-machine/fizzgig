@@ -10,7 +10,6 @@ const searchHttp = rateLimit(axios.create(), {
 // temporary debounce hack due to time restraints!
 
 async function search(keywords) {
-  console.log("in request");
   try {
     const response = await searchHttp.get(
       `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keywords}&apikey=${selectAlphaVantageKey()}`
@@ -18,7 +17,6 @@ async function search(keywords) {
     console.log("in response with: ", response.data);
     return response.data;
   } catch (e) {
-    console.log("in catch");
     throw new Error(e);
   }
 }
