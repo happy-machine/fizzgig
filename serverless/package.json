@@ -20,13 +20,14 @@
     "jsonwebtoken": "^8.2.1",
     "moment": "^2.24.0",
     "mongoose": "^5.9.9",
+    "promise.allsettled": "^1.0.2",
     "promisify": "0.0.3",
     "redis": "^3.0.2"
   },
   "devDependencies": {
-    "serverless-offline": "^3.20.1",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
-    "nyc": "^13.3.0"
+    "nyc": "^13.3.0",
+    "serverless-offline": "^3.20.1"
   }
 }

@@ -11,11 +11,12 @@ async function getUser(userId) {
 
 async function updateUserTickers(userId, tickers) {
   try {
+    console.log(`updating ${userId} with ${tickers}`);
+    await User.updateOne({ _id: userId }, { tickers });
     const user = await User.findById(userId);
-    user["tickers"] = tickers;
-    const result = await user.save();
-    return result;
+    return user;
   } catch (e) {
+    console.log("error in update");
     return Promise.reject(new Error(e));
   }
 }

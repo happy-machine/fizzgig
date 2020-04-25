@@ -1,3 +1,4 @@
+app: fizzgig
 service: fizzgig
 org: thisisdjfresh
 
@@ -44,11 +45,6 @@ functions:
 
   scheduler:
     handler: functions/scheduler.runScheduler
-    events:
-      - http:
-          path: scheduler
-          method: get
-          cors: true
 
   getUser:
     handler: functions/userTickers.getUser
