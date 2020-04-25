@@ -75,7 +75,7 @@ const cacheSymbolsToRedis = (transformed) =>
          * cache for 24 hours so that if symbols are
          * deleted they do not persist in redis
          **/
-      ).catch((e) => `Error in cacheSymbolsToRedis: ${e}`);
+      ).catch((e) => throw new Error(`Error in cacheSymbolsToRedis: ${e}`));
     } else {
       return null;
     }
