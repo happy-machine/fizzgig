@@ -52,7 +52,7 @@ function Search({
         if (response.success) {
           setUser(response.data);
           setStatus(
-            `You are being subscribed to Symbol ${result["1. symbol"]}, please wait.`
+            `You are subscribed to Symbol ${result["1. symbol"]}, only updated during stock market hours, please wait.`
           );
         } else {
           setStatus("Problem updating settings");
