@@ -168,7 +168,7 @@ async function fetchTicker(symbol) {
     );
     return response.data;
   } catch (e) {
-    throw new Error("Error in controller/ticker", e);
+    throw new Error("Error in fetchTicker: ", e);
   }
 }
 
