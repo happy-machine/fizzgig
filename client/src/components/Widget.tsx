@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { BRAND_ORANGE } from "../constants";
 import { Settings, Close } from "@material-ui/icons";
 import { updateUserTickers } from "../lib/requests";
@@ -18,7 +18,6 @@ type IWidgetProps = {
   stockValue: string;
   symbol: string;
   thresholds: IThresholds;
-  showSettings: ISettings;
   setShowSettings: (showSettings: ISettings) => void;
   user: IUser;
   setUser: (user: IUser) => void;
@@ -29,32 +28,21 @@ function Widget({
   stockValue,
   thresholds,
   symbol,
-  showSettings,
   setShowSettings,
   user,
   setUser,
   setStatus,
 }: IWidgetProps) {
-  const [alert, setAlert] = useState(
-    thresholds.high && thresholds.low
-      ? parseFloat(thresholds.high) < parseFloat(stockValue) ||
-          parseFloat(thresholds?.low) > parseFloat(stockValue)
-      : null
-  );
-  //   console.log(
-  //     parseFloat(thresholds.low),
-  //     parseFloat(stockValue),
-  //     parseFloat(thresholds.high)
-  //   );
-  //   console.log(parseFloat(thresholds.low) > parseFloat(stockValue));
-  //   console.log(parseFloat(thresholds.high) < parseFloat(stockValue));
-  //   console.log(
-  //     !(
-  //       parseFloat(thresholds.high) < parseFloat(stockValue) ||
-  //       parseFloat(thresholds.low) > parseFloat(stockValue)
-  //     )
-  //   );
-  //   console.log("____________________________");
+  const [alert, setAlert] = useState(false);
+  useEffect(() => {
+    if (thresholds.high && thresholds.low) {
+      parseFloat(thresholds.high) < parseFloat(stockValue) ||
+      parseFloat(thresholds?.low) > parseFloat(stockValue)
+        ? setAlert(true)
+        : setAlert(false);
+    }
+  }, [thresholds, stockValue]);
+
   const handleDelete = useCallback(async () => {
     const response = await updateUserTickers(
       user._id,

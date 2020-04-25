@@ -140,7 +140,6 @@ function App() {
               setUser={setUser}
               setStatus={setStatus}
               stockValue={String(tickers.get(symbol) || "N/A")}
-              showSettings={showSettings}
               setShowSettings={setShowSettings}
               thresholds={{
                 high: notification_thresholds?.high,
