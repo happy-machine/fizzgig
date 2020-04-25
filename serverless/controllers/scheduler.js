@@ -19,10 +19,10 @@ async function run() {
     const symbolnNotifiieBlob = await allSettled(
       makeListOfNotifiiesForSymbol(transformed)
     );
-    console.dir(symbolnNotifiieBlob, { depth: 2 });
+    console.dir(symbolnNotifiieBlob, { depth: 3 });
     try {
       const data = await allSettled(notifyNotifiies(symbolnNotifiieBlob));
-      console.dir(data, { depth: 2 });
+      console.dir(data, { depth: 3 });
       // filter the users according to shouldNotify ruleset, and notify via email
       return data;
     } catch (e) {
@@ -61,6 +61,7 @@ const fetchTickers = (symbols) => symbols.map((symbol) => fetchTicker(symbol));
 
 const cacheSymbolsToRedis = (transformed) =>
   transformed.filter(async (item) => {
+    console.dir(item, { depth: 3 });
     if (
       item.ticker["Global Quote"] &&
       item.ticker["Global Quote"]["05. price"]
@@ -75,7 +76,9 @@ const cacheSymbolsToRedis = (transformed) =>
          * cache for 24 hours so that if symbols are
          * deleted they do not persist in redis
          **/
-      ).catch((e) => throw new Error(`Error in cacheSymbolsToRedis: ${e}`));
+      ).catch((e) => {
+        throw new Error(`Error in cacheSymbolsToRedis: ${e}`);
+      });
     } else {
       return null;
     }
