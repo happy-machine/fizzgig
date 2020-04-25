@@ -36,7 +36,7 @@ function App() {
         }
       }
     }
-    if (loggedIn && cookieExists()) {
+    if (cookieExists() && loggedIn) {
       setUp();
     }
   }, [loggedIn]);
