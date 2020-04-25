@@ -156,7 +156,7 @@ const notifyNotifiies = (symbolnNotifiieBlob) =>
         });
         return promises;
       } else {
-        console.dir(symbolnNotifiieBlob[i].value, { depth: 2 });
+        throw new Error(symbolnNotifiieBlob[i].value);
       }
     })
     .flat();
