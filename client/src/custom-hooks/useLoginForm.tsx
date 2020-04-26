@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export type ISignUpFormInput = {
+export type ILoginFormInput = {
   password?: string;
   username?: string;
 };
@@ -9,8 +9,8 @@ export type ICallback = {
   success: boolean;
 };
 
-const useSignUpForm = (
-  callback: (args: ISignUpFormInput) => Promise<ICallback>,
+const useLoginForm = (
+  callback: (args: ILoginFormInput) => Promise<ICallback>,
   setStatus: (status: string) => void,
   setLoggedIn: (loggedIn: boolean) => void
 ) => {
@@ -29,14 +29,14 @@ const useSignUpForm = (
     event.persist();
     setInputs((inputs: any) => ({
       ...inputs,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     }));
   };
   return {
     handleSubmit,
     handleInputChange,
-    inputs
+    inputs,
   };
 };
 
-export default useSignUpForm;
+export default useLoginForm;
