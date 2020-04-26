@@ -4,6 +4,7 @@ import { v4 as uuid } from "uuid";
 import { cookieExists } from "./lib/cookie";
 import { logout } from "./lib/auth";
 import Login from "./components/Login";
+import Signup from "./components/Signup";
 import Search from "./components/Search";
 import Settings from "./components/Settings";
 import Widget from "./components/Widget";
@@ -17,6 +18,7 @@ import "./css/components.scss";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(cookieExists());
+  const [showSignup, setShowSignup] = useState(false);
   useEffect(() => {
     async function setUp() {
       const user = await getUser();
@@ -84,9 +86,22 @@ function App() {
   const [searchString, setSearchString] = useState("");
   return (
     <div className="App">
-      {!loggedIn && (
+      {!loggedIn && !showSignup && (
         <div id="logged-out">
-          <Login setLoggedIn={setLoggedIn} setStatus={setStatus} />
+          <Login
+            setLoggedIn={setLoggedIn}
+            setStatus={setStatus}
+            setShowSignup={setShowSignup}
+          />
+        </div>
+      )}
+      {showSignup && (
+        <div id="logged-out">
+          <Signup
+            setLoggedIn={setLoggedIn}
+            setStatus={setStatus}
+            setShowSignup={setShowSignup}
+          />
         </div>
       )}
       <header className="App-header">

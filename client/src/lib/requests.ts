@@ -5,6 +5,7 @@ import {
   IUser,
   IUserTicker,
 } from "../components/types";
+import { ISignupFormInput } from "../custom-hooks/useSignupForm";
 const axios = require("axios");
 
 export type ICallbackArgs = {
@@ -120,6 +121,31 @@ export const authenticate = async (username: string, password: string) => {
       data: {
         email: username,
         password,
+      },
+    });
+    if (!res.data.auth) throw new Error("Not Authed");
+    setCookie(COOKIE_TOKEN, res.data.token, 7);
+    return res.data;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const register = async ({
+  username,
+  password,
+  name,
+}: ISignupFormInput) => {
+  console.log("got: ", username, password, name);
+  try {
+    const res = await axios({
+      method: POST,
+      url: `${API_PATH}/register`,
+      data: {
+        email: username,
+        password,
+        name,
       },
     });
     if (!res.data.auth) throw new Error("Not Authed");

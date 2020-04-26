@@ -1,29 +1,30 @@
 import React from "react";
-import { authenticateUser } from "../lib/auth";
-import useLoginForm from "../custom-hooks/useLoginForm";
+import { signupUser } from "../lib/auth";
+import useSignupForm from "../custom-hooks/useSignupForm";
 import { Lock, Person } from "@material-ui/icons";
 
-type ILoginProps = {
+type ISignupProps = {
   setLoggedIn: (isLoggedIn: boolean) => void;
   setStatus: (status: string) => void;
-  setShowSignup: (showSignup: boolean) => void;
+  setShowSignup: (signup: boolean) => void;
 };
 
-function Login({ setLoggedIn, setStatus, setShowSignup }: ILoginProps) {
-  const { inputs, handleInputChange, handleSubmit } = useLoginForm(
-    authenticateUser,
+function Signup({ setLoggedIn, setStatus, setShowSignup }: ISignupProps) {
+  const { inputs, handleInputChange, handleSubmit } = useSignupForm(
+    signupUser,
     setStatus,
-    setLoggedIn
+    setLoggedIn,
+    setShowSignup
   );
-  const { username, password } = inputs;
+  const { username, name, password } = inputs;
 
   return (
-    <div id="login-container">
+    <div id="signup-container">
       <div className="login-item">
         <form onSubmit={handleSubmit} className="form form-login">
           <div className="form-field">
             <Person />
-            <span className="hidden">Username</span>
+            <span className="hidden">Email</span>
             <input
               id="login-username"
               type="text"
@@ -32,6 +33,21 @@ function Login({ setLoggedIn, setStatus, setShowSignup }: ILoginProps) {
               placeholder="Email"
               required
               value={username}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-field">
+            <Person />
+            <span className="hidden">Name</span>
+            <input
+              id="login-username"
+              type="text"
+              name="name"
+              className="form-input"
+              placeholder="Full name"
+              required
+              value={name}
               onChange={handleInputChange}
             />
           </div>
@@ -52,10 +68,7 @@ function Login({ setLoggedIn, setStatus, setShowSignup }: ILoginProps) {
           </div>
 
           <div className="form-field">
-            <button type="submit">Log In</button>
-          </div>
-          <div id="sign-up-button" onClick={() => setShowSignup(true)}>
-            Sign up
+            <button type="submit">Sign up</button>
           </div>
         </form>
       </div>
@@ -63,4 +76,4 @@ function Login({ setLoggedIn, setStatus, setShowSignup }: ILoginProps) {
   );
 }
 
-export default Login;
+export default Signup;
