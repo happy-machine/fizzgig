@@ -1,6 +1,6 @@
 import React from "react";
 import { authenticateUser } from "../lib/auth";
-import useSignUpForm from "../custom-hooks/useSignUpForm";
+import useLoginForm from "../custom-hooks/useLoginForm";
 import { Lock, Person } from "@material-ui/icons";
 
 type ILoginProps = {
@@ -9,7 +9,7 @@ type ILoginProps = {
 };
 
 function Login({ setLoggedIn, setStatus }: ILoginProps) {
-  const { inputs, handleInputChange, handleSubmit } = useSignUpForm(
+  const { inputs, handleInputChange, handleSubmit } = useLoginForm(
     authenticateUser,
     setStatus,
     setLoggedIn

@@ -1,12 +1,12 @@
 import { COOKIE_TOKEN } from "../constants";
 import { authenticate } from "../lib/requests";
 import { deleteCookie } from "../lib/cookie";
-import { ISignUpFormInput } from "../custom-hooks/useSignUpForm";
+import { ILoginForm } from "../custom-hooks/useLoginForm";
 
 export async function authenticateUser({
   username = "",
   password = "",
-}: ISignUpFormInput) {
+}: ILoginForm) {
   const error = { message: "Error Logging In", success: false };
   try {
     const response = await authenticate(username, password);
