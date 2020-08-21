@@ -1,5 +1,3 @@
-![squared up logo](squaredUp.png "Squared Up Logo")
-
 # Fizzgig
 
 Single page react web app that uses redis, mongodb and the Alpha-Vantage stock API via AWS Lambda.
