@@ -13,7 +13,7 @@
   "description": "",
   "dependencies": {
     "aws-sdk": "^2.659.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "axios-rate-limit": "^1.2.1",
     "bcryptjs": "^2.4.3",
     "bcryptjs-then": "^1.0.1",
