@@ -18,7 +18,7 @@
     "bcryptjs": "^2.4.3",
     "bcryptjs-then": "^1.0.1",
     "jsonwebtoken": "^8.2.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.9",
     "promise.allsettled": "^1.0.2",
     "promisify": "0.0.3",
