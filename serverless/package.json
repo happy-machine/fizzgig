@@ -17,7 +17,7 @@
     "axios-rate-limit": "^1.2.1",
     "bcryptjs": "^2.4.3",
     "bcryptjs-then": "^1.0.1",
-    "jsonwebtoken": "^8.2.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.24.0",
     "mongoose": "^5.9.9",
     "promise.allsettled": "^1.0.2",
